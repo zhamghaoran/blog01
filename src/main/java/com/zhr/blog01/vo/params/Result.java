@@ -1,4 +1,4 @@
-package com.zhr.blog01.vo;
+package com.zhr.blog01.vo.params;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class Result {
     public static Result success(Object data) {
         return new Result(true,200,"success",data);
     }
-    public static Result fail(Integer code, String msg) {
+    public static Result fail(Integer code, String msg)  {
         return new Result(false,code,msg,null);
     }
 }

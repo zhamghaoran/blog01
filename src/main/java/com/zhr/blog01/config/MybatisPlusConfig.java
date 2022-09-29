@@ -6,7 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.zhr.blog.dao.mapper")
+@MapperScan("com.zhr.blog01.dao.mapper")
 public class MybatisPlusConfig {
     // 分页插件
     public MybatisPlusInterceptor mybatisPlusInterceptor () {

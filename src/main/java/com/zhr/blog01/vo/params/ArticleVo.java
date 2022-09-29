@@ -1,6 +1,8 @@
-package com.zhr.blog01.vo;
+package com.zhr.blog01.vo.params;
 
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ArticleVo {
@@ -22,9 +24,9 @@ public class ArticleVo {
 
     private String author;
 
-    private ArticleBodyVo body;
+ //   private ArticleBodyVo body;
 
     private List<TagVo> tags;
 
-    private List<CategoryVo> categorys;
+ //   private List<CategoryVo> categorys;
 }

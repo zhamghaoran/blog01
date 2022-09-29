@@ -1,10 +1,11 @@
 package com.zhr.blog01.service;
 
-import com.zhr.blog01.vo.ArticleVo;
-import com.zhr.blog01.vo.PageParams;
-import com.zhr.blog01.vo.Result;
+import com.zhr.blog01.vo.params.ArticleVo;
+import com.zhr.blog01.vo.params.Result;
+import com.zhr.blog01.vo.params.PageParams;
 
 import java.util.List;
+
 
 public interface ArticleService {
 
@@ -13,6 +14,6 @@ public interface ArticleService {
      * @param pageParams
      * @return
      */
-    Result listArticlesPage(PageParams pageParams);
+    List<ArticleVo> listArticlesPage(PageParams pageParams);
 
 }
