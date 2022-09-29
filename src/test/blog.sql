@@ -20,6 +20,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for ms_admin
 -- ----------------------------
+use blog;
 DROP TABLE IF EXISTS `ms_admin`;
 CREATE TABLE `ms_admin`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
