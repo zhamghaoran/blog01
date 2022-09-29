@@ -1,8 +1,9 @@
 package com.zhr.blog01.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zhr.blog01.dao.pojo.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SysUser extends BaseMapper<SysUser> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhr.blog01.dao.mapper.TagMapper">
+    <select id="findTagsByArticleId"  parameterType="long" resultType="com.zhr.blog01.dao.pojo.Tag">
+        select id,avatar,tag_name as tagName
+        from ms_tag
+        where id in
+        (select tag_id from ms_article_tag where article_id = #{articleId})
+    </select>
+
+</mapper>
