@@ -3,12 +3,15 @@ package com.zhr.blog01.service.Impl;
 import com.zhr.blog01.dao.mapper.TagMapper;
 import com.zhr.blog01.dao.pojo.Tag;
 import com.zhr.blog01.service.Tagservice;
+import com.zhr.blog01.vo.params.Result;
 import com.zhr.blog01.vo.params.TagVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 @Service
 public class TagServiceImpl implements Tagservice {
@@ -32,5 +35,22 @@ public class TagServiceImpl implements Tagservice {
         // mybatisPlus 无法进行多表查询
         List<Tag> tags = tagMapper.findTagsByArticleId(articled);
         return copyList(tags);
+    }
+
+    @Override
+    public Result hots(int limit) {
+        /**
+         * 标签所拥有的文章数量最多就是最热标签
+         * 查询根据tag_id进行分组计数，从大到小排列，取前limit个
+         */
+        List<Long> tagIds = tagMapper.findHotsTagIds(limit);
+        if (CollectionUtils.isEmpty(tagIds)) {
+            return Result.success(Collections.emptyList());
+        }
+        //需求的是TagId 和 tagName Tag对象
+        // select * from tag where id in (1,2,3,4)
+        List<Tag> tagList = tagMapper.findTagsByTagIds(tagIds);
+        return Result.success(tagList);
+
     }
 }
