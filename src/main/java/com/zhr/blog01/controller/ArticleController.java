@@ -4,7 +4,6 @@ import com.zhr.blog01.service.ArticleService;
 import com.zhr.blog01.vo.params.ArticleVo;
 import com.zhr.blog01.vo.params.Result;
 import com.zhr.blog01.vo.params.PageParams;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +40,8 @@ public class ArticleController {
     public Result listArchives() {
         return articleService.listArchives();
     }
+
+
 
 
 }
