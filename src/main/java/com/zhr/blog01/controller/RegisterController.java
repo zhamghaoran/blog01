@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("login")
-public class LoginController {
+public class RegisterController {
     @Autowired
     private LoginService loginService;
-    @RequestMapping(method = RequestMethod.POST)
-    public Result login(@RequestBody LoginParam loginParam) {
-        return loginService.login(loginParam);
-
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
+    public Result register(@RequestBody LoginParam loginParam) {
+        return loginService.register(loginParam);
     }
 }

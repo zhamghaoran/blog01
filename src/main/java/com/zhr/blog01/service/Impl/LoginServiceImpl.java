@@ -1,7 +1,6 @@
 package com.zhr.blog01.service.Impl;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mysql.cj.util.StringUtils;
 import com.zhr.blog01.config.JWTUtils;
 import com.zhr.blog01.dao.pojo.LoginParam;
@@ -9,19 +8,16 @@ import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.service.LoginService;
 import com.zhr.blog01.service.SysUserService;
 import com.zhr.blog01.vo.params.Result;
-import io.netty.util.internal.StringUtil;
-import org.apache.commons.codec.cli.Digest;
-import org.apache.ibatis.executor.ErrorContext;
-import org.apache.tomcat.jni.Error;
-import org.eclipse.persistence.oxm.json.JsonObjectBuilderResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Transactional
 public class LoginServiceImpl implements LoginService {
     private static final String slat = "123456";
 
@@ -51,4 +47,34 @@ public class LoginServiceImpl implements LoginService {
         redisTemplate.delete("TOKEN_" + token);
         return Result.success(null);
     }
+
+    @Override
+    public Result register(LoginParam loginParam) {
+        String account = loginParam.getAccount();
+        String password = loginParam.getPassword();
+        String nickname = loginParam.getNickname();
+        if (StringUtils.isNullOrEmpty(account) || StringUtils.isNullOrEmpty(password) || StringUtils.isNullOrEmpty(nickname))
+            return Result.fail(500,"错误");
+        SysUser sysUser = this.sysUserService.findUserByAccount(account);
+        if (sysUser != null) {
+            return Result.fail(500,"已注册");
+        }
+        sysUser = new SysUser();
+        sysUser.setNickname(nickname);
+        sysUser.setPassword(DigestUtils.md5DigestAsHex((password + slat).getBytes()));
+        sysUser.setAccount(account);
+        sysUser.setCreateDate(System.currentTimeMillis());
+        sysUser.setLastLogin(System.currentTimeMillis());
+        sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+        sysUser.setAdmin(1);
+        sysUser.setDeleted(0);
+        sysUser.setSalt("");
+        sysUser.setStatus("");
+        sysUser.setEmail("");
+        this.sysUserService.save(sysUser);
+        String token = JWTUtils.createToken(sysUser.getId());
+        redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
+        return Result.success(token);
+    }
+
 }
