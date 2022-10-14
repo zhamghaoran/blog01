@@ -6,4 +6,6 @@ import com.zhr.blog01.vo.params.Result;
 
 public interface LoginService {
     Result login(LoginParam loginParam);
+
+    Result logout(String token);
 }
