@@ -16,4 +16,10 @@ public interface ArticleService {
      */
     List<ArticleVo> listArticlesPage(PageParams pageParams);
 
+    Result hotArticle(int lim);
+
+    Result NewArticle();
+
+    Result listArchives();
+
 }

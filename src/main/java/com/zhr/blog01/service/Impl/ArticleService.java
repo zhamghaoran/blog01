@@ -3,11 +3,13 @@ package com.zhr.blog01.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhr.blog01.dao.mapper.ArticleMapper;
+import com.zhr.blog01.dao.pojo.Archives;
 import com.zhr.blog01.dao.pojo.Article;
 import com.zhr.blog01.service.SysUserService;
 import com.zhr.blog01.service.Tagservice;
 import com.zhr.blog01.vo.params.ArticleVo;
 import com.zhr.blog01.vo.params.PageParams;
+import com.zhr.blog01.vo.params.Result;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +68,30 @@ public class ArticleService implements com.zhr.blog01.service.ArticleService {
         }
         // 并不是所有的接口都需要标签
         return  articleVo;
+    }
+
+    @Override
+    public Result hotArticle(int lim) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getViewCounts);
+        queryWrapper.select(Article::getId,Article::getTitle);
+        queryWrapper.last("limit " + lim);
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+
+        return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result NewArticle() {
+        LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleLambdaQueryWrapper.orderByDesc(Article::getCreateDate);
+        List<Article> articles = articleMapper.selectList(articleLambdaQueryWrapper);
+        return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result listArchives() {
+        List<Archives>  archives = articleMapper.selectMonth();
+        return Result.success(archives);
     }
 }

@@ -1,6 +1,10 @@
 package com.zhr.blog01.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.zhr.blog01.dao.mapper.ArticleMapper;
 import com.zhr.blog01.dao.mapper.TagMapper;
+import com.zhr.blog01.dao.pojo.Article;
 import com.zhr.blog01.dao.pojo.Tag;
 import com.zhr.blog01.service.Tagservice;
 import com.zhr.blog01.vo.params.Result;
@@ -17,6 +21,8 @@ import java.util.List;
 public class TagServiceImpl implements Tagservice {
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private ArticleMapper articleMapper;
 
     public TagVo copy(Tag tag){
         TagVo tagVo = new TagVo();
@@ -53,4 +59,6 @@ public class TagServiceImpl implements Tagservice {
         return Result.success(tagList);
 
     }
+
+
 }
