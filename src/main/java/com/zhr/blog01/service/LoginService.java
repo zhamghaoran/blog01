@@ -2,6 +2,7 @@ package com.zhr.blog01.service;
 
 
 import com.zhr.blog01.dao.pojo.LoginParam;
+import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.vo.params.Result;
 
 public interface LoginService {
@@ -10,4 +11,6 @@ public interface LoginService {
     Result logout(String token);
 
     Result register(LoginParam loginParam);
+
+    SysUser checkToken(String token);
 }

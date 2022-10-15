@@ -77,4 +77,9 @@ public class LoginServiceImpl implements LoginService {
         return Result.success(token);
     }
 
+    @Override
+    public SysUser checkToken(String token) {
+
+    }
+
 }
