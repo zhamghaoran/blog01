@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -79,7 +80,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public SysUser checkToken(String token) {
-
+        Map<String, Object> stringObjectMap = JWTUtils.checkToken(token);
+        Object userId = stringObjectMap.get("userId");
+        return sysUserService.findUserById((Long) userId);
     }
 
 }
