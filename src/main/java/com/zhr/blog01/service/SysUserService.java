@@ -3,6 +3,7 @@ package com.zhr.blog01.service;
 import com.zhr.blog01.dao.mapper.SysUserMapper;
 import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.vo.params.Result;
+import com.zhr.blog01.vo.params.UserVo;
 
 public interface SysUserService {
     SysUser findUserById(Long Id) ;
@@ -13,4 +14,6 @@ public interface SysUserService {
 
     SysUser findUserByAccount(String account);
     void save(SysUser sysUser);
+
+    UserVo findUserVoById(Long authorId);
 }

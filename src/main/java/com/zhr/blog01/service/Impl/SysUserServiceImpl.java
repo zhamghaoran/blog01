@@ -10,6 +10,7 @@ import com.zhr.blog01.dao.pojo.LoginUserVo;
 import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.service.SysUserService;
 import com.zhr.blog01.vo.params.Result;
+import com.zhr.blog01.vo.params.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -72,5 +73,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public void save(SysUser sysUser) {
         this.sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long authorId) {
+
+
     }
 }
