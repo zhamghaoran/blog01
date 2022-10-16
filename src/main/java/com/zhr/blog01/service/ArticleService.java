@@ -22,5 +22,5 @@ public interface ArticleService {
 
     Result listArchives();
 
-    ArticleVo findArticleById(long id);
+    ArticleVo findArticleById(long id) throws InterruptedException;
 }

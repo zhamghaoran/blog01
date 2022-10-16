@@ -41,7 +41,7 @@ public class ArticleController {
         return articleService.listArchives();
     }
     @RequestMapping(value = "/view/{id}",method = RequestMethod.POST)
-    public Result finArticleById(@PathVariable("id") long id) {
+    public Result finArticleById(@PathVariable("id") long id) throws InterruptedException {
         ArticleVo articleVo = articleService.findArticleById(id);
         return Result.success(articleVo);
     }

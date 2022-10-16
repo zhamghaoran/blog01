@@ -7,10 +7,7 @@ import com.zhr.blog01.dao.mapper.ArticleMapper;
 import com.zhr.blog01.dao.pojo.Archives;
 import com.zhr.blog01.dao.pojo.Article;
 import com.zhr.blog01.dao.pojo.ArticleBody;
-import com.zhr.blog01.service.ArticleService;
-import com.zhr.blog01.service.CategoryService;
-import com.zhr.blog01.service.SysUserService;
-import com.zhr.blog01.service.Tagservice;
+import com.zhr.blog01.service.*;
 import com.zhr.blog01.vo.params.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
@@ -140,10 +137,21 @@ public class ArticleServiceImpl implements ArticleService {
         List<Archives> archives = articleMapper.selectMonth();
         return Result.success(archives);
     }
-
+    @Autowired
+    private ThreadService threadService;
     @Override
-    public ArticleVo findArticleById(long id) {
+    public ArticleVo findArticleById(long id) throws InterruptedException {
+        /**
+         * 1.根据id查询
+         * 2.根据bodyid和categoryid去做关联查询
+         */
         Article article = articleMapper.selectById(id);
+        threadService.updateViewCount(articleMapper,article);
+        // 查看完文章之后，本应该直接返回数据了，这时候做了一个更新操作，更新时写加锁，阻塞其他的读操作，性能就会下降
+        // 更新 增加了此次接口的耗时，如果一切更新出问题，不能影响，查看文章的操作
+        // 线程池
+        // 可以把更新操作吗，可以把更新操作扔到线程池中去执行，和主线程就不想关了
+
         return copy(article, true, true, true, true);
     }
 }
