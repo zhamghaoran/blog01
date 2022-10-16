@@ -40,5 +40,10 @@ public class ArticleController {
     public Result listArchives() {
         return articleService.listArchives();
     }
+    @RequestMapping(value = "/view/{id}",method = RequestMethod.POST)
+    public Result finArticleById(@PathVariable("id") long id) {
+        ArticleVo articleVo = articleService.findArticleById(id);
+        return Result.success(articleVo);
+    }
 
 }
