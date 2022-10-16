@@ -3,6 +3,7 @@ package com.zhr.blog01.handler;
 import com.alibaba.fastjson.JSON;
 import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.service.LoginService;
+import com.zhr.blog01.utils.UserThreadLocal;
 import com.zhr.blog01.vo.params.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,12 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.getWriter().println(JSON.toJSONString(result));
             return false;
         }
+        UserThreadLocal.put(sysUser);
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserThreadLocal.remove();
     }
 }
