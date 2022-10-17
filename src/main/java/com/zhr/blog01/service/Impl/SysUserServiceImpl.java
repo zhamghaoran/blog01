@@ -1,7 +1,6 @@
 package com.zhr.blog01.service.Impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mysql.cj.util.StringUtils;
 import com.zhr.blog01.config.JWTUtils;
@@ -22,7 +21,8 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+
     @Override
     public SysUser findUserById(Long Id) {
         SysUser sysUser = sysUserMapper.selectById(Id);
@@ -36,9 +36,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findUser(String account, String pwd) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getAccount,account);
-        queryWrapper.eq(SysUser::getPassword,pwd);
-        queryWrapper.select(SysUser::getId,SysUser::getAccount,SysUser::getAvatar,SysUser::getNickname);
+        queryWrapper.eq(SysUser::getAccount, account);
+        queryWrapper.eq(SysUser::getPassword, pwd);
+        queryWrapper.select(SysUser::getId, SysUser::getAccount, SysUser::getAvatar, SysUser::getNickname);
         queryWrapper.last("limit 1");
         return sysUserMapper.selectOne(queryWrapper);
     }
@@ -46,12 +46,12 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Result getUserInfo(String token) {
         Map<String, Object> map = JWTUtils.checkToken(token);
-        if(map == null) {
-            return  Result.fail(500,"token错误");
+        if (map == null) {
+            return Result.fail(500, "token错误");
         }
         String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
         if (StringUtils.isNullOrEmpty(userJson)) {
-            return Result.fail(500,"token错误");
+            return Result.fail(500, "token错误");
         }
         SysUser sysUser = JSON.parseObject(userJson, SysUser.class);
         LoginUserVo loginUserVo = new LoginUserVo();
@@ -65,7 +65,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findUserByAccount(String account) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getAccount,account);
+        queryWrapper.eq(SysUser::getAccount, account);
         queryWrapper.last("limit 1");
         return sysUserMapper.selectOne(queryWrapper);
     }
@@ -77,7 +77,17 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public UserVo findUserVoById(Long authorId) {
-
-
+        SysUser sysUser = sysUserMapper.selectById(authorId);
+        if (sysUser == null) {
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("jjking");
+        }
+        UserVo userVo = new UserVo();
+        userVo.setAvatar(sysUser.getAvatar());
+        userVo.setNickname(sysUser.getNickname());
+        userVo.setId(sysUser.getId());
+        return userVo;
     }
 }
