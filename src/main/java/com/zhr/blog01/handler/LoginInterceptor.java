@@ -7,6 +7,7 @@ import com.zhr.blog01.utils.UserThreadLocal;
 import com.zhr.blog01.vo.params.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.transform.impl.AddInitTransformer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -3,8 +3,11 @@ package com.zhr.blog01.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zhr.blog01.dao.mapper.CommentMapper;
 import com.zhr.blog01.dao.pojo.Comment;
+import com.zhr.blog01.dao.pojo.SysUser;
 import com.zhr.blog01.service.CommentService;
 import com.zhr.blog01.service.SysUserService;
+import com.zhr.blog01.utils.UserThreadLocal;
+import com.zhr.blog01.vo.params.CommentParam;
 import com.zhr.blog01.vo.params.CommentVo;
 import com.zhr.blog01.vo.params.Result;
 import com.zhr.blog01.vo.params.UserVo;
@@ -66,5 +69,25 @@ public class CommentServiceImpl implements CommentService {
         commentLambdaQueryWrapper.eq(Comment::getLevel, 1);
         List<Comment> comments = commentMapper.selectList(commentLambdaQueryWrapper);
         return Result.success(copyList(comments));
+    }
+
+    @Override
+    public Result comment(CommentParam commentParam) {
+        SysUser sysUser = UserThreadLocal.get();
+        Comment comment = new Comment();
+        comment.setArticleId(commentParam.getArticleId());
+        comment.setAuthorId(sysUser.getId());
+        comment.setContent(commentParam.getContent());
+        comment.setCreateDate(System.currentTimeMillis());
+        Long parent = commentParam.getParent();
+        if (parent == null || parent == 0) {
+            comment.setLevel(1);
+        } else
+            comment.setLevel(2);
+        comment.setParentId(parent == null ? 0 : parent);
+        Long toUserId = commentParam.getToUserId();
+        comment.setToUid(toUserId == null ? 0 : toUserId);
+        this.commentMapper.insert(comment);
+        return Result.success(null);
     }
 }
