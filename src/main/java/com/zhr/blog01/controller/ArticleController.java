@@ -1,5 +1,6 @@
 package com.zhr.blog01.controller;
 
+import com.zhr.blog01.dao.pojo.PostArticleParm;
 import com.zhr.blog01.service.ArticleService;
 import com.zhr.blog01.vo.params.ArticleVo;
 import com.zhr.blog01.vo.params.Result;
@@ -44,6 +45,10 @@ public class ArticleController {
     public Result finArticleById(@PathVariable("id") long id) throws InterruptedException {
         ArticleVo articleVo = articleService.findArticleById(id);
         return Result.success(articleVo);
+    }
+    @RequestMapping(value = "publish",method =  RequestMethod.POST)
+    public Result PostArticle(@RequestBody PostArticleParm postArticleParm) {
+        return articleService.PostArticle(postArticleParm);
     }
 
 }

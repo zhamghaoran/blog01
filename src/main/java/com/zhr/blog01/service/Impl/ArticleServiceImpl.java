@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhr.blog01.dao.mapper.ArticleBodyMapper;
 import com.zhr.blog01.dao.mapper.ArticleMapper;
-import com.zhr.blog01.dao.pojo.Archives;
-import com.zhr.blog01.dao.pojo.Article;
-import com.zhr.blog01.dao.pojo.ArticleBody;
+import com.zhr.blog01.dao.mapper.ArticleTagMapper;
+import com.zhr.blog01.dao.pojo.*;
 import com.zhr.blog01.service.*;
 import com.zhr.blog01.vo.params.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ public class ArticleServiceImpl implements ArticleService {
     private Tagservice tagservice;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     /**
      * 分页查询数据库表
@@ -153,5 +155,40 @@ public class ArticleServiceImpl implements ArticleService {
         // 可以把更新操作吗，可以把更新操作扔到线程池中去执行，和主线程就不想关了
 
         return copy(article, true, true, true, true);
+    }
+
+    @Override
+    public Result PostArticle(@RequestBody PostArticleParm postArticleParm) {
+        Article article = new Article();
+        article.setAuthorId(postArticleParm.getId());
+        article.setCategoryId(postArticleParm.getCategory().getId());
+        article.setCreateDate(System.currentTimeMillis());
+        article.setSummary(postArticleParm.getSummary());
+        article.setTitle(postArticleParm.getTitle());
+        article.setViewCounts(0);
+        article.setWeight(Article.Article_Common);
+        article.setBodyId(-1L);
+        this.articleMapper.insert(article);
+        //tags
+        List<TagVo> list = postArticleParm.getTags();
+        if (list != null) {
+            for(TagVo i : list) {
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setArticleId(article.getId());
+                articleTag.setTagId(i.getId());
+                this.articleTagMapper.insert(articleTag);
+            }
+        }
+        ArticleBody articleBody = new ArticleBody();
+        articleBody.setContent(postArticleParm.getBody().getContent());
+        articleBody.setContentHtml(postArticleParm.getBody().getContentHtml());
+        articleBody.setArticleId(article.getId());
+        articleBodyMapper.insert(articleBody);
+        article.setBodyId(articleBody.getId());
+        articleMapper.updateById(article);
+        ArticleVo articleVo = new ArticleVo();
+        articleVo.setId(article.getId());
+        return Result.success(articleVo);
+
     }
 }

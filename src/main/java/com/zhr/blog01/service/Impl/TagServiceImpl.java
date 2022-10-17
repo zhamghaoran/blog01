@@ -60,5 +60,15 @@ public class TagServiceImpl implements Tagservice {
 
     }
 
+    @Override
+    public Result getAllTags() {
+        List<Tag> tags = tagMapper.selectList(new LambdaQueryWrapper<>());
+        List<TagVo> tagVos = new ArrayList<>();
+        for (Tag i : tags) {
+            tagVos.add(new TagVo(i.getId(),i.getTagName()));
+        }
+        return Result.success(tagVos);
+    }
+
 
 }
