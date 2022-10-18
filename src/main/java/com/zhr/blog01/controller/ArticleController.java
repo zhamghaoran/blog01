@@ -1,5 +1,6 @@
 package com.zhr.blog01.controller;
 
+import com.zhr.blog01.common.aop.LogAnnotation;
 import com.zhr.blog01.dao.pojo.PostArticleParm;
 import com.zhr.blog01.service.ArticleService;
 import com.zhr.blog01.vo.params.ArticleVo;
@@ -23,6 +24,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping
+    @LogAnnotation(module = "文章",operation = "获取文章列表") // 代表要对此接口记日志
     public Result listArticle(@RequestBody PageParams pageParams) {
         List<ArticleVo> articles = articleService.listArticlesPage(pageParams);
         return Result.success(articles);

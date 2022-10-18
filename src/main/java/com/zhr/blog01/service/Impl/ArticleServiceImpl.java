@@ -189,6 +189,5 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleVo articleVo = new ArticleVo();
         articleVo.setId(article.getId());
         return Result.success(articleVo);
-
     }
 }
