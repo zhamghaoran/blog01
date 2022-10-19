@@ -1,6 +1,7 @@
 package com.zhr.blog01.controller;
 
 import com.zhr.blog01.common.aop.LogAnnotation;
+import com.zhr.blog01.common.cache.Cache;
 import com.zhr.blog01.dao.pojo.PostArticleParm;
 import com.zhr.blog01.service.ArticleService;
 import com.zhr.blog01.vo.params.ArticleVo;
@@ -25,6 +26,7 @@ public class ArticleController {
      */
     @PostMapping
     @LogAnnotation(module = "文章",operation = "获取文章列表") // 代表要对此接口记日志
+    @Cache(name = "文章列表")
     public Result listArticle(@RequestBody PageParams pageParams) {
         List<ArticleVo> articles = articleService.listArticlesPage(pageParams);
         return Result.success(articles);
@@ -32,6 +34,7 @@ public class ArticleController {
 
     @LogAnnotation(module = "最热文章",operation = "获取最热文章列表")
     @PostMapping("hot")
+    @Cache(expire = 10 * 60 * 1000,name = "hot_article")
     public Result hotArticle() {
         int lim = 5;
         return articleService.hotArticle(lim);

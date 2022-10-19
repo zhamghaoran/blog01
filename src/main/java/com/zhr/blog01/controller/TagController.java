@@ -17,4 +17,9 @@ public class TagController {
     public Result getTag() {
         return tagservice.getAllTags();
     }
+    @RequestMapping("detail")
+    public Result getDetail() {
+        return tagservice.getDetail();
+    }
+
 }

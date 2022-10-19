@@ -11,4 +11,6 @@ public interface Tagservice {
     Result hots(int limit);
 
     Result getAllTags();
+
+    Result getDetail();
 }

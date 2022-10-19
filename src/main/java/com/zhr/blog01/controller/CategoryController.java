@@ -3,6 +3,7 @@ package com.zhr.blog01.controller;
 import com.zhr.blog01.service.CategoryService;
 import com.zhr.blog01.vo.params.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,14 @@ public class CategoryController {
     @RequestMapping(method = RequestMethod.GET)
     public Result listCategory() {
         return categoryService.findAll();
+    }
+    @RequestMapping("detail")
+    public Result getDetail() {
+        return categoryService.getDetail();
+    }
+    @RequestMapping("detail/{id}")
+    public Result categoriesDetailById(@PathVariable("id") Long id) {
+        return categoryService.categoriesById(id);
     }
 
 }

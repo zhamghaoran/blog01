@@ -39,6 +39,9 @@ public class ArticleServiceImpl implements ArticleService {
         LambdaQueryWrapper<Article> queryChainWrapper = new LambdaQueryWrapper<>();
         // order by 创建时间
         // 是否置顶进行排序
+        if (pageParams.getCategoryId() != null) {
+            queryChainWrapper.eq(Article::getCategoryId,pageParams.getCategoryId());
+        }
         queryChainWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryChainWrapper);
         List<Article> records = articlePage.getRecords();

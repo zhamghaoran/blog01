@@ -3,8 +3,10 @@ package com.zhr.blog01.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.zhr.blog01.dao.mapper.ArticleMapper;
+import com.zhr.blog01.dao.mapper.CategoryMapper;
 import com.zhr.blog01.dao.mapper.TagMapper;
 import com.zhr.blog01.dao.pojo.Article;
+import com.zhr.blog01.dao.pojo.Category;
 import com.zhr.blog01.dao.pojo.Tag;
 import com.zhr.blog01.service.Tagservice;
 import com.zhr.blog01.vo.params.Result;
@@ -23,6 +25,8 @@ public class TagServiceImpl implements Tagservice {
     private TagMapper tagMapper;
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     public TagVo copy(Tag tag){
         TagVo tagVo = new TagVo();
@@ -65,10 +69,19 @@ public class TagServiceImpl implements Tagservice {
         List<Tag> tags = tagMapper.selectList(new LambdaQueryWrapper<>());
         List<TagVo> tagVos = new ArrayList<>();
         for (Tag i : tags) {
-            tagVos.add(new TagVo(i.getId(),i.getTagName()));
+            tagVos.add(new TagVo(i.getId(),i.getTagName(),null));
         }
         return Result.success(tagVos);
     }
 
-
+    @Override
+    public Result getDetail() {
+        List<Tag> tags = tagMapper.selectList(new LambdaQueryWrapper<>());
+        List<TagVo> tagVos = new ArrayList<>();
+        List<Category> categories = categoryMapper.selectList(new LambdaQueryWrapper<>());
+        for (int i = 0;i < tags.size();i ++) {
+            tagVos.add(new TagVo(tags.get(i).getId(),tags.get(i).getTagName(),categories.get(i).getAvatar()));
+        }
+        return Result.success(tagVos);
+    }
 }
