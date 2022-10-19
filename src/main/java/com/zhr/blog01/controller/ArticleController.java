@@ -30,6 +30,7 @@ public class ArticleController {
         return Result.success(articles);
     }
 
+    @LogAnnotation(module = "最热文章",operation = "获取最热文章列表")
     @PostMapping("hot")
     public Result hotArticle() {
         int lim = 5;
