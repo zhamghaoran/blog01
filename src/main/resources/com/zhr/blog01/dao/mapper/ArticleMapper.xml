@@ -8,5 +8,8 @@
         from ms_article
         group by year, month
     </select>
+    <select id="select" resultType="java.lang.Long">
+        select create_date from ms_article
+    </select>
 
 </mapper>

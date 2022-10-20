@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -139,7 +140,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Result listArchives() {
-        List<Archives> archives = articleMapper.selectMonth();
+        LambdaQueryWrapper<Object> queryWrapper = new LambdaQueryWrapper<>();
+        List<Long> list = articleMapper.select();
+        List<Archives> archives = new ArrayList<>();
+        for (Long i : list) {
+            DateTime dateTime = new DateTime(i);
+
+            int year = dateTime.getYear();
+            int month = dateTime.getMonthOfYear();
+            for (Archives archive : archives) {
+                if (archive.getMonth() == month && archive.getYear() == year) {
+                    archive.setCount(archive.getCount() + 1);
+                }
+            }
+            archives.add(new Archives(year,month,1));
+        }
         return Result.success(archives);
     }
     @Autowired

@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.relational.core.sql.In;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Archives {
     private Integer year;
     private Integer month;

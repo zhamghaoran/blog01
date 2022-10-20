@@ -26,7 +26,7 @@ public class ArticleController {
      */
     @PostMapping
     @LogAnnotation(module = "文章",operation = "获取文章列表") // 代表要对此接口记日志
-    @Cache(name = "文章列表")
+    @Cache(name = "文章列表",expire = 10 * 1000)
     public Result listArticle(@RequestBody PageParams pageParams) {
         List<ArticleVo> articles = articleService.listArticlesPage(pageParams);
         return Result.success(articles);

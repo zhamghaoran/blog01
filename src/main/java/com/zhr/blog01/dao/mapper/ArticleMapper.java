@@ -11,4 +11,6 @@ import java.util.List;
 public interface ArticleMapper extends BaseMapper<Article> {
 
     List<Archives> selectMonth();
+
+    List<Long> select();
 }
